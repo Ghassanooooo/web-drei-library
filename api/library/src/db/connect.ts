@@ -5,7 +5,7 @@ const MONGO_URI = "mongodb://mongo:27017/";
 const connectDB = () => {
   mongoose
     .connect(MONGO_URI, {
-      dbName: "presentation",
+      dbName: "library",
     })
     .then(() => {
       console.log("Mongodb connected....");

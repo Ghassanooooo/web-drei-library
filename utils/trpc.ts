@@ -1,9 +1,9 @@
 import { httpBatchLink, loggerLink } from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";
-import { presentationApi } from "./baseURL";
+import { api } from "./baseURL";
 
 import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
-import { type AppRouter } from "../api/presentation/src/index";
+import { type AppRouter } from "../api/library/src/index";
 
 /** A set of type-safe react-query hooks for your tRPC API. */
 // @ts-ignore
@@ -17,7 +17,7 @@ export const trpc = createTRPCNext<AppRouter>({
             (opts.direction === "down" && opts.result instanceof Error),
         }),
         httpBatchLink({
-          url: presentationApi,
+          url: api,
         }),
       ],
     };

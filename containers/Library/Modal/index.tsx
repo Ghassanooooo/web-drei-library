@@ -1,7 +1,13 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState, ReactNode } from "react";
 
-export default function MyModal({ children }: { children: ReactNode }) {
+export default function MyModal({
+  children,
+  onSubmit,
+}: {
+  children: ReactNode;
+  onSubmit: any;
+}) {
   let [isOpen, setIsOpen] = useState(false);
 
   function closeModal() {
@@ -31,7 +37,10 @@ export default function MyModal({ children }: { children: ReactNode }) {
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-4 text-center">
+            <form
+              onSubmit={onSubmit}
+              className="flex min-h-full items-center justify-center p-4 text-center"
+            >
               <Transition.Child
                 as={Fragment}
                 enter="ease-out duration-300"
@@ -50,6 +59,7 @@ export default function MyModal({ children }: { children: ReactNode }) {
                   </Dialog.Title>
                   <div className="mt-2">
                     <input
+                      name="title"
                       type="text"
                       placeholder="Folder Name"
                       className="input input-bordered input-primary w-full max-w-xs"
@@ -66,7 +76,7 @@ export default function MyModal({ children }: { children: ReactNode }) {
                     </button>
 
                     <button
-                      type="button"
+                      type="submit"
                       className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                       onClick={closeModal}
                     >
@@ -75,7 +85,7 @@ export default function MyModal({ children }: { children: ReactNode }) {
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
-            </div>
+            </form>
           </div>
         </Dialog>
       </Transition>
