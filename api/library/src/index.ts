@@ -29,12 +29,31 @@ const appRouter = router({
     return folders;
   }),
 
+  getFolder: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, rawInput }: any) => {
+      console.log("Create getFolder ✌️✌️ => ", rawInput);
+      const folder = await Folder.findById(rawInput.id);
+      return folder;
+    }),
+
   createFolder: publicProcedure
     .input(z.object({ title: z.string() }))
     .mutation(async ({ ctx, input }: any) => {
-      console.log("Create Folder ✌️✌️ => ", input);
       const folder = new Folder({ title: input.title, folderId: uuid() });
       await folder.save();
+      return folder;
+    }),
+
+  editFolder: publicProcedure
+    .input(z.object({ title: z.string(), id: z.string() }))
+    .mutation(async ({ ctx, input }: any) => {
+      const folder = await Folder.findByIdAndUpdate(
+        { _id: input.id },
+        { title: input.title },
+        { new: true }
+      );
+
       return folder;
     }),
 });

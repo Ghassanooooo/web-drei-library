@@ -1,27 +1,18 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState, ReactNode } from "react";
 
-export default function MyModal({
+export default function Modal({
+  actionName,
   children,
+  label,
   onSubmit,
-}: {
-  children: ReactNode;
-  onSubmit: any;
-}) {
-  let [isOpen, setIsOpen] = useState(false);
-
-  function closeModal() {
-    setIsOpen(false);
-  }
-
-  function openModal() {
-    setIsOpen(true);
-  }
-
+  isOpen,
+  setIsOpen,
+  closeModal,
+  defaultValue,
+}: any) {
   return (
     <>
-      <div onClick={openModal}>{children}</div>
-
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <Transition.Child
@@ -55,10 +46,11 @@ export default function MyModal({
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
-                    Name Folder
+                    {label}
                   </Dialog.Title>
                   <div className="mt-2">
                     <input
+                      defaultValue={defaultValue || ""}
                       name="title"
                       type="text"
                       placeholder="Folder Name"
@@ -80,7 +72,7 @@ export default function MyModal({
                       className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                       onClick={closeModal}
                     >
-                      Create
+                      {actionName}
                     </button>
                   </div>
                 </Dialog.Panel>

@@ -1,11 +1,11 @@
 "use client";
-import Modal from "./Modal";
+import Modal from "../../components/Library/Modal";
 import { trpc } from "@/utils/trpc";
 
 import { IoMdAdd } from "react-icons/io";
 
-import Folder from "./Folder";
-import { Fragment } from "react";
+import Folder from "@/components/Library/Folder";
+import { Fragment, useState } from "react";
 function Library() {
   const utils = trpc.useContext();
   const { isLoad, data, fetchNextPage, hasNextPage, isFetchingNextPage }: any =
@@ -34,20 +34,39 @@ function Library() {
     e.preventDefault();
     mutate({ title: e.target.title.value });
   };
+
+  let [isOpen, setIsOpen] = useState(false);
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
+  function openModal() {
+    setIsOpen(true);
+  }
   return (
     <>
+      <Modal
+        isOpen={isOpen}
+        closeModal={closeModal}
+        openModal={openModal}
+        actionName="Create"
+        label="Name Folder"
+        onSubmit={onCreateFolder}
+      />
       <p className="text-gray-700 text-3xl mb-16 font-bold">Library</p>
 
       <div className="grid mb-4 ">
         <div className="rounded px-4 bg-white h-16 shadow-sm flex items-center cursor-pointer">
-          <Modal onSubmit={onCreateFolder}>
-            <div className="rounded h-10 border-2 flex px-2 items-center">
-              <div>
-                <IoMdAdd className="m-auto text-lg" />
-              </div>
-              <div className="pl-2">Folder</div>
+          <div
+            onClick={openModal}
+            className="rounded h-10 border-2 flex px-2 items-center"
+          >
+            <div>
+              <IoMdAdd className="m-auto text-lg" />
             </div>
-          </Modal>
+            <div className="pl-2">Folder</div>
+          </div>
         </div>
       </div>
 
@@ -55,7 +74,7 @@ function Library() {
         {data?.map((folder: any, index: number) => {
           return (
             <Fragment key={index}>
-              <Folder title={folder.title} totalContent={folder.totalContent} />
+              <Folder data={folder} />
             </Fragment>
           );
         })}
