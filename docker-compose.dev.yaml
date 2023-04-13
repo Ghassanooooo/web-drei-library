@@ -1,0 +1,91 @@
+version: "3.8"
+services:
+  nginx:
+    depends_on:
+      - library-api
+      - client
+      - rabbitmq
+      - mongo
+      - mongo-express
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./nginx
+    ports:
+      - "3333:3333"
+
+  rabbitmq:
+    image: rabbitmq:3.8-management-alpine
+    container_name: "rabbitmq"
+    hostname: rabbitmq
+    ports:
+      - 5673:5672
+      - 15673:15672
+    volumes:
+      - /var/lib/rabbitmq
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - ./data:/data/db
+    restart: always
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongo
+      #- ME_CONFIG_MONGODB_ENABLE_ADMIN=true
+      #- ME_CONFIG_MONGODB_ADMINUSERNAME=root
+      #- ME_CONFIG_MONGODB_ADMINPASSWORD=pass12345
+      - ME_CONFIG_BASICAUTH_USERNAME=root
+      - ME_CONFIG_BASICAUTH_PASSWORD=root
+    ports:
+      - 8002:8081
+    depends_on:
+      - mongo
+    restart: always
+
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./app:/app/app
+      - ./components:/app/components
+      - ./containers:/app/containers
+      - ./public:/app/public
+      - ./utils:/app/utils
+      - ./types:/app/types
+      - ./nginx:/app/nginx
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - WDS_SOCKET_PORT=0
+    depends_on:
+      - library-api
+    restart: unless-stopped
+
+  library-api:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./api/library
+    volumes:
+      - ./api/library:/app
+      - /api/library/node_modules
+    environment:
+      - PORT=3010
+      - NODE_ENV=development
+      - DB_NAME=library
+      - ROLE=admin
+    restart: unless-stopped
+    depends_on:
+      - mongo
+      - rabbitmq
