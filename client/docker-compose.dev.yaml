@@ -54,13 +54,18 @@ services:
 
   client:
     build:
-      context: ./client
+      context: .
       dockerfile: Dockerfile.dev
     ports:
       - "3000:3000"
     volumes:
-      - ./client/app:/app/app
-      - ./client/modules:/app/modules
+      - ./app:/app/app
+      - ./components:/app/components
+      - ./containers:/app/containers
+      - ./public:/app/public
+      - ./utils:/app/utils
+      - ./types:/app/types
+      - ./nginx:/app/nginx
     environment:
       - CHOKIDAR_USEPOLLING=true
       - WDS_SOCKET_PORT=0

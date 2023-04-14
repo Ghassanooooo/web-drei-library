@@ -1,0 +1,35 @@
+version: "3.8"
+services:
+  nginx-reveal-drei:
+    depends_on:
+      - reveal-drei
+      - presentation-api
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./nginx
+    ports:
+      - "4444:4444"
+
+  reveal-drei:
+    image: "ghassanaldarwish/reveal-drei"
+    ports:
+      - "4222:4222"
+    environment:
+      - NODE_ENV=production
+      - CHOKIDAR_USEPOLLING=true
+      - WDS_SOCKET_PORT=0
+    depends_on:
+      - presentation-api
+    restart: unless-stopped
+
+  presentation-api:
+    build:
+      dockerfile: Dockerfile
+      context: ./api/presentation
+    environment:
+      - PORT=4223
+      - NODE_ENV=production
+      - DB_NAME=presentation
+      - ROLE=admin
+    restart: unless-stopped

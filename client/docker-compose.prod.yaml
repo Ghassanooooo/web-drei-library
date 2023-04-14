@@ -1,9 +1,9 @@
 version: "3.8"
 services:
-  nginx:
+  nginx-reveal-drei:
     depends_on:
-      - library-api
-      - client
+      - presentation-api
+      - reveal-drei
       - rabbitmq
       - mongo
       - mongo-express
@@ -12,7 +12,34 @@ services:
       dockerfile: Dockerfile
       context: ./nginx
     ports:
-      - "3333:3333"
+      - "4444:4444"
+
+  reveal-drei:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4222:4222"
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+      - WDS_SOCKET_PORT=0
+      - NEXT_PUBLIC_NODE_ENV_DEVELOPMENT=true
+      - TEST=hahahahahah
+    depends_on:
+      - presentation-api
+    restart: unless-stopped
+
+  presentation-api:
+    build:
+      dockerfile: Dockerfile
+      context: ./api/presentation
+    environment:
+      - PORT=4223
+      - NODE_ENV=development
+      - DB_NAME=presentation
+      - ROLE=admin
+    restart: unless-stopped
 
   rabbitmq:
     image: rabbitmq:3.8-management-alpine
@@ -51,36 +78,3 @@ services:
     depends_on:
       - mongo
     restart: always
-
-  client:
-    build:
-      context: ./client
-      dockerfile: Dockerfile.dev
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./client/app:/app/app
-      - ./client/modules:/app/modules
-    environment:
-      - CHOKIDAR_USEPOLLING=true
-      - WDS_SOCKET_PORT=0
-    depends_on:
-      - library-api
-    restart: unless-stopped
-
-  library-api:
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./api/library
-    volumes:
-      - ./api/library:/app
-      - /api/library/node_modules
-    environment:
-      - PORT=3010
-      - NODE_ENV=development
-      - DB_NAME=library
-      - ROLE=admin
-    restart: unless-stopped
-    depends_on:
-      - mongo
-      - rabbitmq
