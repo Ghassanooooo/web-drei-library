@@ -1,20 +1,20 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { toast } from "@/hooks/use-toast"
+import * as React from "react";
+import { toast } from "@/modules/shared/hooks/use-toast";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/modules/shared/lib/utils";
 
 interface DocsSearchProps extends React.HTMLAttributes<HTMLFormElement> {}
 
 export function DocsSearch({ className, ...props }: DocsSearchProps) {
   function onSubmit(event: React.SyntheticEvent) {
-    event.preventDefault()
+    event.preventDefault();
 
     return toast({
       title: "Not implemented",
       description: "We're still working on the search.",
-    })
+    });
   }
 
   return (
@@ -32,5 +32,5 @@ export function DocsSearch({ className, ...props }: DocsSearchProps) {
         <span className="text-xs">⌘</span>K
       </kbd>
     </form>
-  )
+  );
 }

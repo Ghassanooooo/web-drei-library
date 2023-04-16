@@ -15,23 +15,23 @@ export const dashboardConfig: DashboardConfig = {
   sidebarNav: [
     {
       title: "Lessons",
-      href: "/dashboard",
+      href: "/lessons",
       icon: "monitor",
     },
     {
       title: "Library",
-      href: "/dashboard/library",
+      href: "/library",
       icon: "library",
     },
     {
       title: "Reports",
-      href: "/dashboard/reports",
+      href: "/reports",
       icon: "chart",
     },
 
     {
       title: "Account",
-      href: "/dashboard/account",
+      href: "/account",
       icon: "user",
     },
   ],

@@ -1,5 +1,5 @@
-import { siteConfig } from "@/config/site"
-import { Icons } from "@/components/icons"
+import { siteConfig } from "@/modules/shared/config/site";
+import { Icons } from "@/modules/shared/components/icons";
 
 export function SiteFooter() {
   return (
@@ -52,5 +52,5 @@ export function SiteFooter() {
         </p>
       </div>
     </footer>
-  )
+  );
 }

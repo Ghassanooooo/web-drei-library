@@ -1,64 +1,41 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { useSearchParams } from "next/navigation"
-import { toast } from "@/hooks/use-toast"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { signIn } from "next-auth/react"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
+import * as React from "react";
+import { useSearchParams } from "next/navigation";
+import { toast } from "@/modules/shared/hooks/use-toast";
 
-import { cn } from "@/lib/utils"
-import { userAuthSchema } from "@/lib/validations/auth"
-import { Icons } from "@/components/icons"
-import { buttonVariants } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import * as z from "zod";
+
+import { cn } from "@/modules/shared/lib/utils";
+import { userAuthSchema } from "@/modules/shared/lib/validations/auth";
+import { Icons } from "@/modules/shared/components/icons";
+import { buttonVariants } from "@/modules/shared/components/ui/button";
+import { Input } from "@/modules/shared/components/ui/input";
+import { Label } from "@/modules/shared/components/ui/label";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-type FormData = z.infer<typeof userAuthSchema>
+type FormData = z.infer<typeof userAuthSchema>;
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>({
-    resolver: zodResolver(userAuthSchema),
-  })
-  const [isLoading, setIsLoading] = React.useState<boolean>(false)
-  const [isGitHubLoading, setIsGitHubLoading] = React.useState<boolean>(false)
-  const searchParams = useSearchParams()
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [isGitHubLoading, setIsGitHubLoading] = React.useState<boolean>(false);
+  const searchParams = useSearchParams();
 
   async function onSubmit(data: FormData) {
-    setIsLoading(true)
+    setIsLoading(true);
 
-    const signInResult = await signIn("email", {
-      email: data.email.toLowerCase(),
-      redirect: false,
-      callbackUrl: searchParams?.get("from") || "/dashboard",
-    })
-
-    setIsLoading(false)
-
-    if (!signInResult?.ok) {
-      return toast({
-        title: "Something went wrong.",
-        description: "Your sign in request failed. Please try again.",
-        variant: "destructive",
-      })
-    }
+    setIsLoading(false);
 
     return toast({
       title: "Check your email",
       description: "We sent you a login link. Be sure to check your spam too.",
-    })
+    });
   }
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={() => {}}>
         <div className="grid gap-2">
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="email">
@@ -72,13 +49,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               autoComplete="email"
               autoCorrect="off"
               disabled={isLoading || isGitHubLoading}
-              {...register("email")}
             />
-            {errors?.email && (
-              <p className="px-1 text-xs text-red-600">
-                {errors.email.message}
-              </p>
-            )}
           </div>
           <button className={cn(buttonVariants())} disabled={isLoading}>
             {isLoading && (
@@ -100,8 +71,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         type="button"
         className={cn(buttonVariants({ variant: "outline" }))}
         onClick={() => {
-          setIsGitHubLoading(true)
-          signIn("github")
+          setIsGitHubLoading(true);
         }}
         disabled={isLoading || isGitHubLoading}
       >
@@ -113,5 +83,5 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         Github
       </button>
     </div>
-  )
+  );
 }

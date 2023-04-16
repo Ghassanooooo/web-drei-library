@@ -1,10 +1,10 @@
-import Link from "next/link"
+import Link from "next/link";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/modules/shared/lib/utils";
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-  href?: string
-  disabled?: boolean
+  href?: string;
+  disabled?: boolean;
 }
 
 export function Card({
@@ -34,5 +34,5 @@ export function Card({
         </Link>
       )}
     </div>
-  )
+  );
 }
