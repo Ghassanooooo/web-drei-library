@@ -71,7 +71,6 @@ services:
       - ./client/styles:/app/styles
       - ./client/types:/app/types
       - ./client/containers:/app/containers
-
     environment:
       - CHOKIDAR_USEPOLLING=true
       - WDS_SOCKET_PORT=0

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
 import EditorJS from "@editorjs/editorjs";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Post } from "@prisma/client";
+//import { Post } from "@prisma/client";
 import { useForm } from "react-hook-form";
 import TextareaAutosize from "react-textarea-autosize";
 import * as z from "zod";
@@ -17,12 +17,12 @@ import { Icons } from "@/containers/icons";
 import { buttonVariants } from "@/components/button";
 
 interface EditorProps {
-  post: Pick<Post, "id" | "title" | "content" | "published">;
+  // post: Pick<Post, "id" | "title" | "content" | "published">;
 }
 
 type FormData = z.infer<typeof postPatchSchema>;
 
-export function Editor({ post }: EditorProps) {
+export function Editor({ post }: any) {
   const { register, handleSubmit } = useForm<FormData>({
     resolver: zodResolver(postPatchSchema),
   });
@@ -32,13 +32,23 @@ export function Editor({ post }: EditorProps) {
   const [isMounted, setIsMounted] = React.useState<boolean>(false);
 
   const initializeEditor = React.useCallback(async () => {
+    // @ts-ignore
     const EditorJS = (await import("@editorjs/editorjs")).default;
+    // @ts-ignore
     const Header = (await import("@editorjs/header")).default;
+    // @ts-ignore
     const Embed = (await import("@editorjs/embed")).default;
+    // @ts-ignore
+    const Image = (await import("@editorjs/simple-image")).default;
+    // @ts-ignore
     const Table = (await import("@editorjs/table")).default;
+    // @ts-ignore
     const List = (await import("@editorjs/list")).default;
+    // @ts-ignore
     const Code = (await import("@editorjs/code")).default;
+    // @ts-ignore
     const LinkTool = (await import("@editorjs/link")).default;
+    // @ts-ignore
     const InlineCode = (await import("@editorjs/inline-code")).default;
 
     const body = postPatchSchema.parse(post);
@@ -60,6 +70,7 @@ export function Editor({ post }: EditorProps) {
           inlineCode: InlineCode,
           table: Table,
           embed: Embed,
+          image: Image,
         },
       });
     }
