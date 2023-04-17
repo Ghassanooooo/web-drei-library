@@ -2,7 +2,7 @@ version: "3.8"
 services:
   nginx:
     depends_on:
-      - library-api
+      - folders-api
       - client
       - rabbitmq
       - mongo
@@ -60,26 +60,39 @@ services:
       - "3000:3000"
     volumes:
       - ./client/app:/app/app
+      - ./client/store:/app/store
+      - ./client/public:/app/public
+      - ./client/components:/app/components
+      - ./client/config:/app/config
+      - ./client/content:/app/content
+      - ./client/hooks:/app/hooks
+      - ./client/lib:/app/lib
       - ./client/modules:/app/modules
+      - ./client/styles:/app/styles
+      - ./client/types:/app/types
+      - ./client/containers:/app/containers
+
     environment:
       - CHOKIDAR_USEPOLLING=true
       - WDS_SOCKET_PORT=0
     depends_on:
-      - library-api
+      - folders-api
     restart: unless-stopped
 
-  library-api:
+  folders-api:
     build:
       dockerfile: Dockerfile.dev
-      context: ./api/library
+      context: ./api/folders
     volumes:
-      - ./api/library:/app
-      - /api/library/node_modules
+      - ./api/folders/src:/app/src
+      - /api/folders/node_modules
     environment:
       - PORT=3010
       - NODE_ENV=development
-      - DB_NAME=library
+      - DB_NAME=folders
       - ROLE=admin
+      - DB_URI=mongodb://mongo:27017
+      - ORIGIN=*
     restart: unless-stopped
     depends_on:
       - mongo

@@ -1,10 +1,15 @@
-/** @type {import('tailwindcss').Config} */
 const { colors } = require("tailwindcss/colors");
 const { fontFamily } = require("tailwindcss/defaultTheme");
+
+/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./modules/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./containers/**/*.{ts,tsx}",
+    "./content/**/*.{md,mdx}",
+    "./containers/**/*.{ts,tsx}",
+    "./modules/**/*.{ts,tsx}",
   ],
   darkMode: ["class"],
   theme: {
