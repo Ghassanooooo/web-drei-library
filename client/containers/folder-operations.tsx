@@ -29,7 +29,7 @@ import { Button } from "@/components/button";
 import {
   useDeleteFolderMutation,
   useUpdateFolderMutation,
-} from "@/store/services/dashboardService";
+} from "@/store/services/foldersService";
 
 export function FolderOperations({ folder }: any) {
   const [showDeleteAlert, setShowDeleteAlert] = React.useState<boolean>(false);

@@ -1,18 +1,20 @@
 import { dashboardApi } from "../api/dashboardApi";
 
-export const extendedDashboardApi = dashboardApi.injectEndpoints({
+export const endpoints = "/folders-api";
+
+export const extendedFoldersApi = dashboardApi.injectEndpoints({
   endpoints: (builder: any) => ({
     getFolders: builder.query({
-      query: () => "/folders",
+      query: () => endpoints + "/folders",
       providesTags: ["Folders"],
     }),
     getFolder: builder.query({
-      query: (id: any) => "/folder/" + id,
+      query: (id: any) => endpoints + "/folder/" + id,
       providesTags: ["Folders"],
     }),
     createFolder: builder.mutation({
       query: (folder: any) => ({
-        url: "/folder",
+        url: endpoints + "/folder",
         method: "POST",
         body: folder,
       }),
@@ -20,7 +22,7 @@ export const extendedDashboardApi = dashboardApi.injectEndpoints({
     }),
     updateFolder: builder.mutation({
       query: ({ id, ...rest }: any) => ({
-        url: "/folder/" + id,
+        url: endpoints + "/folder/" + id,
         method: "PUT",
         body: rest,
       }),
@@ -28,7 +30,7 @@ export const extendedDashboardApi = dashboardApi.injectEndpoints({
     }),
     deleteFolder: builder.mutation({
       query: (id: any) => ({
-        url: "/folder/" + id,
+        url: endpoints + "/folder/" + id,
         method: "DELETE",
       }),
       invalidatesTags: ["Folders"],
@@ -42,4 +44,4 @@ export const {
   useCreateFolderMutation,
   useUpdateFolderMutation,
   useDeleteFolderMutation,
-} = extendedDashboardApi;
+} = extendedFoldersApi;

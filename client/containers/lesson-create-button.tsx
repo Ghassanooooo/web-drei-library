@@ -7,14 +7,21 @@ import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { Icons } from "@/containers/icons";
 import { buttonVariants } from "@/components/button";
+import { useCreateLessonsMutation } from "@/store/services/lessonsService";
 
 interface FolderCreateButtonProps
   extends React.HTMLAttributes<HTMLButtonElement> {}
 
-export function LessonCreateButton({ className, openModal, ...props }: any) {
+export function LessonCreateButton({ className, ...props }: any) {
+  const [createLesson]: any = useCreateLessonsMutation();
+  const router = useRouter();
+  const onCresteLessonHandler = async () => {
+    const { data } = await createLesson();
+    router.push(`/editor/${data.id}`);
+  };
   return (
     <button
-      onClick={openModal}
+      onClick={onCresteLessonHandler}
       className={cn(buttonVariants(), className)}
       {...props}
     >

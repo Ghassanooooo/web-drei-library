@@ -1,6 +1,5 @@
-import dynamic from "next/dynamic";
 import { DashboardShell } from "@/containers/shell";
-
+import dynamic from "next/dynamic";
 const FoldersPage: any = dynamic(() => import("@/modules/dashboard/folders"), {
   ssr: false,
 });

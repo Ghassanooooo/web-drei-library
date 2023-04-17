@@ -1,23 +1,41 @@
+"use client";
 import { EmptyPlaceholder } from "@/containers/empty-placeholder";
 import { DashboardHeader } from "@/containers/header";
 import { LessonCreateButton } from "@/containers/lesson-create-button";
 import { PostItem } from "@/containers/post-item";
 import { buttonVariants } from "@/components/button";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
+import {
+  useGetLessonsQuery,
+  useGetLessonQuery,
+} from "@/store/services/lessonsService";
 
 export default function LessonsPage() {
-  const posts: any = [];
+  const { data, isLoading, isSuccess, isError, error }: any =
+    useGetLessonsQuery(null);
+
   return (
     <>
       <DashboardHeader heading="Lessons" text="Create and manage lessons.">
         <LessonCreateButton />
       </DashboardHeader>
       <div>
-        {posts?.length ? (
-          <div className="divide-y divide-neutral-200 rounded-md border border-slate-200">
-            {posts.map((post: any) => (
-              <PostItem key={post.id} post={post} />
-            ))}
+        {data?.length ? (
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 bg-white shadow-sm p-4 min-h-screen auto-rows-min">
+            {data?.map((lesson: any, index: number) => {
+              return (
+                <Link
+                  key={index}
+                  href={"/editor/" + lesson.id}
+                  className="shadow-sm flex cursor-pointer h-10 border  rounded-md  border-slate-200"
+                >
+                  <div className="border-r px-2 flex items-center justify-center grow">
+                    {lesson.id}
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         ) : (
           <EmptyPlaceholder>

@@ -3,10 +3,9 @@ services:
   nginx:
     depends_on:
       - folders-api
+      - lessons-api
       - client
       - rabbitmq
-      - mongo
-      - mongo-express
     restart: always
     build:
       dockerfile: Dockerfile
@@ -76,6 +75,7 @@ services:
       - WDS_SOCKET_PORT=0
     depends_on:
       - folders-api
+      - lessons-api
     restart: unless-stopped
 
   folders-api:
@@ -89,6 +89,25 @@ services:
       - PORT=3010
       - NODE_ENV=development
       - DB_NAME=folders
+      - ROLE=admin
+      - DB_URI=mongodb://mongo:27017
+      - ORIGIN=*
+    restart: unless-stopped
+    depends_on:
+      - mongo
+      - rabbitmq
+
+  lessons-api:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./api/lessons
+    volumes:
+      - ./api/lessons/src:/app/src
+      - /api/lessons/node_modules
+    environment:
+      - PORT=3011
+      - NODE_ENV=development
+      - DB_NAME=lessons
       - ROLE=admin
       - DB_URI=mongodb://mongo:27017
       - ORIGIN=*

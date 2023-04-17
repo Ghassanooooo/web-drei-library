@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { postPatchSchema } from "@/lib/validations/post";
 import { Icons } from "@/containers/icons";
 import { buttonVariants } from "@/components/button";
+import { useGetLessonQuery } from "@/store/services/lessonsService";
 
 interface EditorProps {
   // post: Pick<Post, "id" | "title" | "content" | "published">;
@@ -22,7 +23,15 @@ interface EditorProps {
 
 type FormData = z.infer<typeof postPatchSchema>;
 
-export function Editor({ post }: any) {
+export default function Editor({ lesson }: any) {
+  /*const {
+    data: lesson,
+    isLoading,
+    isSuccess,
+    isError,
+    error,
+  }: any = useGetLessonQuery(id);
+  console.log(lesson, "useGetLessonQuery ", id);*/
   const { register, handleSubmit } = useForm<FormData>({
     resolver: zodResolver(postPatchSchema),
   });
@@ -51,7 +60,7 @@ export function Editor({ post }: any) {
     // @ts-ignore
     const InlineCode = (await import("@editorjs/inline-code")).default;
 
-    const body = postPatchSchema.parse(post);
+    const body = postPatchSchema.parse(lesson);
 
     if (!ref.current) {
       const editor = new EditorJS({
@@ -59,7 +68,7 @@ export function Editor({ post }: any) {
         onReady() {
           ref.current = editor;
         },
-        placeholder: "Type here to write your post...",
+        placeholder: "Type here to write your lesson...",
         inlineToolbar: true,
         data: body.content,
         tools: {
@@ -74,7 +83,7 @@ export function Editor({ post }: any) {
         },
       });
     }
-  }, [post]);
+  }, [lesson]);
 
   React.useEffect(() => {
     if (typeof window !== "undefined") {
@@ -83,7 +92,7 @@ export function Editor({ post }: any) {
   }, []);
 
   React.useEffect(() => {
-    if (isMounted) {
+    if (isMounted && lesson) {
       initializeEditor();
 
       return () => {
@@ -91,14 +100,14 @@ export function Editor({ post }: any) {
         ref.current = undefined;
       };
     }
-  }, [isMounted, initializeEditor]);
+  }, [isMounted, initializeEditor, lesson]);
 
   async function onSubmit(data: FormData) {
     setIsSaving(true);
 
     const blocks = await ref.current?.save();
 
-    const response = await fetch(`/api/posts/${post.id}`, {
+    const response = await fetch(`/api/lessons/${lesson.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -131,49 +140,51 @@ export function Editor({ post }: any) {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="grid w-full gap-10">
-        <div className="flex w-full items-center justify-between">
-          <div className="flex items-center space-x-10">
-            <Link
-              href="/dashboard"
-              className={cn(buttonVariants({ variant: "ghost" }))}
-            >
-              <>
-                <Icons.chevronLeft className="mr-2 h-4 w-4" />
-                Back
-              </>
-            </Link>
-            <p className="text-sm text-slate-600">
-              {post.published ? "Published" : "Draft"}
+    <React.Suspense fallback={<div>Loading...</div>}>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="grid w-full gap-10">
+          <div className="flex w-full items-center justify-between">
+            <div className="flex items-center space-x-10">
+              <Link
+                href="/dashboard"
+                className={cn(buttonVariants({ variant: "ghost" }))}
+              >
+                <>
+                  <Icons.chevronLeft className="mr-2 h-4 w-4" />
+                  Back
+                </>
+              </Link>
+              <p className="text-sm text-slate-600">
+                {lesson.published ? "Published" : "Draft"}
+              </p>
+            </div>
+            <button type="submit" className={cn(buttonVariants())}>
+              {isSaving && (
+                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              <span>Save</span>
+            </button>
+          </div>
+          <div className="prose prose-stone mx-auto w-[800px]">
+            <TextareaAutosize
+              autoFocus
+              id="title"
+              defaultValue={lesson.title}
+              placeholder="Post title"
+              className="w-full resize-none appearance-none overflow-hidden text-5xl font-bold focus:outline-none"
+              {...register("title")}
+            />
+            <div id="editor" className="min-h-[500px]" />
+            <p className="text-sm text-gray-500">
+              Use{" "}
+              <kbd className="rounded-md border bg-slate-50 px-1 text-xs uppercase">
+                Tab
+              </kbd>{" "}
+              to open the command menu.
             </p>
           </div>
-          <button type="submit" className={cn(buttonVariants())}>
-            {isSaving && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            <span>Save</span>
-          </button>
         </div>
-        <div className="prose prose-stone mx-auto w-[800px]">
-          <TextareaAutosize
-            autoFocus
-            id="title"
-            defaultValue={post.title}
-            placeholder="Post title"
-            className="w-full resize-none appearance-none overflow-hidden text-5xl font-bold focus:outline-none"
-            {...register("title")}
-          />
-          <div id="editor" className="min-h-[500px]" />
-          <p className="text-sm text-gray-500">
-            Use{" "}
-            <kbd className="rounded-md border bg-slate-50 px-1 text-xs uppercase">
-              Tab
-            </kbd>{" "}
-            to open the command menu.
-          </p>
-        </div>
-      </div>
-    </form>
+      </form>
+    </React.Suspense>
   );
 }

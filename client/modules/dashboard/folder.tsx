@@ -3,7 +3,7 @@ import { useState } from "react";
 
 import { DashboardHeader } from "@/containers/header";
 import { FolderOperations } from "@/containers/folder-operations";
-import { useGetFolderQuery } from "@/store/services/dashboardService";
+import { useGetFolderQuery } from "@/store/services/foldersService";
 function FolderPage({ id }: any) {
   const { data, isLoading, isSuccess, isError, error }: any =
     useGetFolderQuery(id);

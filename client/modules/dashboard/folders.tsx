@@ -13,7 +13,7 @@ import Link from "next/link";
 import {
   useCreateFolderMutation,
   useGetFoldersQuery,
-} from "@/store/services/dashboardService";
+} from "@/store/services/foldersService";
 import { Icons } from "@/containers/icons";
 
 function FoldersPage() {
