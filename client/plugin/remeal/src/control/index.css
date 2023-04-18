@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+:root {
+  --padding: 1vh;
+  --header-height: 6vh;
+  --blocks-height: calc(100vh - var(--header-height));
+}
+
+.mi {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  user-select: none;
+}

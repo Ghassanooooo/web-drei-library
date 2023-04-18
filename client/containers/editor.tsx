@@ -10,18 +10,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import TextareaAutosize from "react-textarea-autosize";
 import * as z from "zod";
-
 import { cn } from "@/lib/utils";
 import { postPatchSchema } from "@/lib/validations/post";
 import { Icons } from "@/containers/icons";
 import { buttonVariants } from "@/components/button";
 import { useGetLessonQuery } from "@/store/services/lessonsService";
-
+//import blockToMarkdown from "@/lib/block-to-md";
 interface EditorProps {
   // post: Pick<Post, "id" | "title" | "content" | "published">;
 }
 
 type FormData = z.infer<typeof postPatchSchema>;
+
+// awesome-editorjs: https://github.com/editor-js/awesome-editorjs
 
 export default function Editor({ lesson }: any) {
   /*const {
@@ -35,7 +36,7 @@ export default function Editor({ lesson }: any) {
   const { register, handleSubmit } = useForm<FormData>({
     resolver: zodResolver(postPatchSchema),
   });
-  const ref = React.useRef<EditorJS>();
+  const ref: any = React.useRef<EditorJS>();
   const router = useRouter();
   const [isSaving, setIsSaving] = React.useState<boolean>(false);
   const [isMounted, setIsMounted] = React.useState<boolean>(false);
@@ -61,7 +62,6 @@ export default function Editor({ lesson }: any) {
     const InlineCode = (await import("@editorjs/inline-code")).default;
 
     const body = postPatchSchema.parse(lesson);
-
     if (!ref.current) {
       const editor = new EditorJS({
         holder: "editor",
@@ -103,9 +103,14 @@ export default function Editor({ lesson }: any) {
   }, [isMounted, initializeEditor, lesson]);
 
   async function onSubmit(data: FormData) {
-    setIsSaving(true);
+    //console.log(data, "data");
+    // console.log(await ref.current?.save(), "ref.current onSubmit");
+    // setIsSaving(true);
 
     const blocks = await ref.current?.save();
+    // const md = blockToMarkdown(blocks.blocks);
+    // console.log("blocks.blocks ==> ", blocks.blocks);
+    // console.log("blocks => MD ==> ", md);
 
     const response = await fetch(`/api/lessons/${lesson.id}`, {
       method: "PATCH",

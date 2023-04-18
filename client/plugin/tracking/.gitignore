@@ -1,0 +1,4 @@
+.DS_Store
+.vscode/
+app/tmp/
+node_modules/
