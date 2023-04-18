@@ -2740,6 +2740,8 @@ export default function (revealElement, options) {
     hasPlugin: plugins.hasPlugin.bind(plugins),
     getPlugin: plugins.getPlugin.bind(plugins),
     getPlugins: plugins.getRegisteredPlugins.bind(plugins),
+
+    // toggleMode: overview.toggle(),
   };
 
   // Our internal API which controllers have access to
