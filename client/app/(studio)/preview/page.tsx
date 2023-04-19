@@ -1,14 +1,14 @@
 import dynamic from "next/dynamic";
-import { Suspense } from "react";
-
-const Preview: any = dynamic(() => import("@/modules/studio/preview"), {
+const Client: any = dynamic(() => import("@/modules/studio/preview"), {
   ssr: false,
 });
+
+import { Suspense } from "react";
 
 async function Index() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <Preview />
+      <Client />
     </Suspense>
   );
 }

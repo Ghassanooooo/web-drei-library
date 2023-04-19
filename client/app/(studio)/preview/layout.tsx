@@ -9,14 +9,7 @@ import { ReactNode } from "react";
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <div
-      className="reveal"
-      style={{
-        width: "50vw",
-        height: "200px",
-        backgroundColor: "black",
-      }}
-    >
+    <div className="reveal">
       <div className="slides ">{children}</div>
     </div>
   );
