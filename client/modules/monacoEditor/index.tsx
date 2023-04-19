@@ -16,9 +16,13 @@ const App = () => {
     console.log("here is the current model value:", value);
   }
   return (
-    <div>
+    <div className="h-[100%]">
       <Editor
-        height="100vh"
+        options={{
+          wordWrap: "on",
+          minimap: { enabled: false },
+        }}
+        height="100%"
         theme="vs-dark"
         defaultLanguage="markdown"
         defaultValue="// some comment"

@@ -5,7 +5,7 @@ import SlidesComponent from "@/containers/Slides";
 
 import useStudioReveal from "@/hooks/useStudioReveal";
 
-function Studio() {
+function Client() {
   useStudioReveal();
 
   return (
@@ -16,4 +16,4 @@ function Studio() {
 }
 
 // @ts-ignore
-export default Studio;
+export default Client;
