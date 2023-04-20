@@ -1,9 +1,10 @@
 "use client";
+import Editor from "@/containers/editor";
 import { Icons } from "@/containers/icons";
 import MonacoEditor from "@/modules/monacoEditor";
 import { Suspense, useState, useEffect } from "react";
 
-function Studio() {
+function Studio({ lesson }: any) {
   const [isLeft, setIsLeft] = useState(true);
   const [isRight, setIsRight] = useState(true);
   const [isTop, setIsTop] = useState(true);
@@ -21,7 +22,9 @@ function Studio() {
     <Suspense fallback={<div>Loading...</div>}>
       <div className=" h-[100%] w-[100%] flex">
         <div
-          style={{ width: isLeft ? (isRight ? "50%" : "98%") : "2%" }}
+          style={{
+            width: isLeft ? (isRight ? "50%" : "98%") : "2%",
+          }}
           className={"h-[100%] w-[50%] relative"}
         >
           <span
@@ -30,7 +33,7 @@ function Studio() {
           >
             {isLeft ? <Icons.arrowLeft /> : <Icons.arrowRight />}
           </span>
-          <MonacoEditor />
+          {isLeft && <MonacoEditor />}
         </div>
 
         <div

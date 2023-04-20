@@ -27,7 +27,7 @@ export default function LessonsPage() {
               return (
                 <Link
                   key={index}
-                  href={"/editor/" + lesson.id}
+                  href={"/studio/markdown/" + lesson.id}
                   className="shadow-sm flex cursor-pointer h-10 border  rounded-md  border-slate-200"
                 >
                   <div className="border-r px-2 flex items-center justify-center grow">

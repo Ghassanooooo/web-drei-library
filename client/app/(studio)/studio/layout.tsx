@@ -1,5 +1,5 @@
 //import { notFound } from "next/navigation";
-import "./resizable.css";
+
 import { dashboardConfig } from "@/config/dashboard";
 import { MainNav } from "@/containers/main-nav";
 import { StudioNav } from "@/containers/studio-nav";
@@ -14,7 +14,7 @@ export default async function DashboardLayout({
 }: DashboardLayoutProps) {
   return (
     <div className="mx-auto flex flex-col space-y-6">
-      <header className=" bg-white ">
+      <header className=" bg-white fixed w-full top-0">
         <div className="flex h-[4vh] px-4 items-center justify-between border-b border-b-slate-200 py-4">
           <MainNav items={dashboardConfig.mainNav} />
           <UserAccountNav
@@ -27,16 +27,16 @@ export default async function DashboardLayout({
         </div>
       </header>
       <div
-        className=" grid grid-cols-8 min-h-[96vh] mt-0"
+        className=" grid grid-cols-8 min-h-[96vh] mt-0 fixed top-[4vh] w-screen"
         style={{ marginTop: 0 }}
       >
-        <aside className="flex-col md:flex border-r col-span-1 px-3 pr-4 overflow-y-auto full-screen">
+        <aside className="flex-col h-[96vh] md:flex border-r col-span-1 px-3 pr-4  full-screen">
           <StudioNav items={dashboardConfig.sidebarNav} />
         </aside>
         <main className="flex w-full flex-1 flex-col overflow-hidden  col-span-6">
           {children}
         </main>
-        <aside className="flex-col md:flex border-l col-span-1 px-3 pr-4 overflow-y-auto full-screen">
+        <aside className="flex-col h-[96vh] md:flex border-l col-span-1 px-3 pr-4  full-screen">
           <StudioNav items={dashboardConfig.sidebarNav} />
         </aside>
       </div>
