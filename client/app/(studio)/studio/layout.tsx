@@ -1,5 +1,5 @@
 //import { notFound } from "next/navigation";
-
+import "./resizable.css";
 import { dashboardConfig } from "@/config/dashboard";
 import { MainNav } from "@/containers/main-nav";
 import { StudioNav } from "@/containers/studio-nav";

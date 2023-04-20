@@ -1,6 +1,9 @@
 import {
   AlertTriangle,
   ArrowRight,
+  ArrowUp,
+  ArrowDown,
+  ArrowLeft,
   Check,
   ChevronLeft,
   ChevronRight,
@@ -55,6 +58,9 @@ export const Icons: any = {
   warning: AlertTriangle,
   user: User,
   arrowRight: ArrowRight,
+  arrowUp: ArrowUp,
+  arrowDown: ArrowDown,
+  arrowLeft: ArrowLeft,
   help: HelpCircle,
   pizza: Pizza,
   gitHub: ({ ...props }: LucideProps) => (

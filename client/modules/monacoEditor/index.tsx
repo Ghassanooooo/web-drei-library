@@ -16,7 +16,7 @@ const App = () => {
     console.log("here is the current model value:", value);
   }
   return (
-    <div className="h-[100%]">
+    <div className="h-[100%] w-[100%]">
       <Editor
         options={{
           wordWrap: "on",
