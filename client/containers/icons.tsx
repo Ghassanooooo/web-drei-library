@@ -30,12 +30,14 @@ import {
   Folder,
   Play,
   FolderCog,
+  GripHorizontal,
   type Icon as LucideIcon,
 } from "lucide-react";
 
 export type Icon = LucideIcon;
 
 export const Icons: any = {
+  dragHorizontal: GripHorizontal,
   folderSettings: FolderCog,
   play: Play,
   folder: Folder,

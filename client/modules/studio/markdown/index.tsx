@@ -46,7 +46,7 @@ function Studio({ lesson }: any) {
           {isLeft && (
             <MonacoEditor
               editorValue={editorValue}
-              content={lesson.content}
+              content={lesson.content[0].data}
               id={lesson.id}
             />
           )}

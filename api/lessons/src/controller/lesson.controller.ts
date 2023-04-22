@@ -5,6 +5,7 @@ import {
   getLessons,
   deleteLesson,
   updateLesson,
+  createMarkdownHorizontalSlide,
 } from "../service/lesson.service";
 
 export async function getLessonHandler(req: Request, res: Response) {
@@ -19,6 +20,19 @@ export async function getLessonHandler(req: Request, res: Response) {
 export async function createLessonHandler(req: Request, res: Response) {
   try {
     const output = await createLesson(req.body);
+    return res.json(output);
+  } catch (e: any) {
+    return res.status(409).json(e.message);
+  }
+}
+
+export async function createMarkdownHorizontalSlideHandler(
+  req: Request,
+  res: Response
+) {
+  console.log("createMarkdownHorizontalSlideHandler ==> input", req.params);
+  try {
+    const output = await createMarkdownHorizontalSlide(req.params.id);
     return res.json(output);
   } catch (e: any) {
     return res.status(409).json(e.message);

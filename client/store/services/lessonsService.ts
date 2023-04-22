@@ -22,6 +22,14 @@ export const extendedLessonsApi = dashboardApi.injectEndpoints({
       }),
       invalidatesTags: ["Lessons"],
     }),
+
+    createMarkdownHorizontalSlide: builder.mutation({
+      query: (id: string) => ({
+        url: endpoints + `/lesson/${id}/markdown/horizontal-slide`,
+        method: "POST",
+      }),
+      invalidatesTags: ["Lessons"],
+    }),
     updateLessons: builder.mutation({
       query: ({ id, content }: any) => ({
         url: endpoints + "/lesson/" + id,
@@ -46,4 +54,5 @@ export const {
   useCreateLessonsMutation,
   useUpdateLessonsMutation,
   useDeleteLessonsMutation,
+  useCreateMarkdownHorizontalSlideMutation,
 } = extendedLessonsApi;

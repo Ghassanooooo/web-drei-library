@@ -2,8 +2,32 @@ import LessonModel from "../models/lesson.model";
 
 export async function createLesson(input: any) {
   try {
+    const content = {
+      data: "# Hello World",
+      type: "markdown",
+    };
     const payload = new LessonModel();
+    payload.content = [content];
     await payload.save();
+
+    return payload;
+  } catch (e) {
+    throw e;
+  }
+}
+
+export async function createMarkdownHorizontalSlide(input: any) {
+  try {
+    const content = {
+      data: "# Hello World",
+      type: "markdown",
+    };
+    const payload = await LessonModel.findByIdAndUpdate(
+      { _id: input },
+      { $push: { content: content } },
+      { new: true }
+    );
+
     return payload;
   } catch (e) {
     throw e;

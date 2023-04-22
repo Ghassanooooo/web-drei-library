@@ -5,11 +5,20 @@ import paginate from "./plugins/paginate.plugin";
 
 const Schema = new mongoose.Schema(
   {
-    content: {
-      type: String,
-
-      default: "# Hello World",
-    },
+    content: [
+      {
+        data: {
+          type: String,
+          required: true,
+          default: "# Hello World",
+        },
+        type: {
+          type: String,
+          required: true,
+          default: "markdown",
+        },
+      },
+    ],
 
     title: {
       type: String,
