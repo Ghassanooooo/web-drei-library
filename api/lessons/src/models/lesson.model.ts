@@ -7,7 +7,8 @@ const Schema = new mongoose.Schema(
   {
     content: {
       type: String,
-      default: "No content yet.",
+
+      default: "# Hello World",
     },
 
     title: {
@@ -28,4 +29,4 @@ const Schema = new mongoose.Schema(
 Schema.plugin(toJSON);
 Schema.plugin(paginate);
 
-export default mongoose.model("Lesson", Schema);
+export default mongoose.model("Markdown", Schema);

@@ -3,7 +3,15 @@
 import React, { useRef } from "react";
 import Editor, { Monaco } from "@monaco-editor/react";
 
-const App = () => {
+const App = ({
+  content,
+  id,
+  editorValue,
+}: {
+  content: string;
+  id: string;
+  editorValue: any;
+}) => {
   const editorRef = useRef(null);
 
   function handleEditorDidMount(editor: any, monaco: Monaco) {
@@ -12,9 +20,12 @@ const App = () => {
     console.log("hhh", editor, monaco);
     editorRef.current = editor;
   }
-  function handleEditorChange(value: any, event: any) {
+  async function handleEditorChange(value: any, event: any) {
+    // const { data } = await updateMarkdown({ content: value, id });
+    editorValue.current = value;
     console.log("here is the current model value:", value);
   }
+
   return (
     <div className="h-[100%] w-[100%]">
       <Editor
@@ -25,7 +36,7 @@ const App = () => {
         height="100%"
         theme="vs-dark"
         defaultLanguage="markdown"
-        defaultValue="// some comment"
+        defaultValue={content}
         onChange={handleEditorChange}
         onMount={handleEditorDidMount}
       />

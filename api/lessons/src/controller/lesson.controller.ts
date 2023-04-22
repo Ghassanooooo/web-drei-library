@@ -35,8 +35,13 @@ export async function getLessonsHandler(req: Request, res: Response) {
 }
 
 export async function updateLessonHandler(req: Request, res: Response) {
+  console.log("updateLesson ==> input", req.body);
+
   try {
-    const output = await updateLesson({ id: req.params.id, ...req.body });
+    const output = await updateLesson({
+      id: req.params.id,
+      content: req.body.content,
+    });
     return res.json(output);
   } catch (e: any) {
     return res.status(409).json(e.message);

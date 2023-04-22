@@ -20,6 +20,14 @@ export function StudioNav({ items }: any) {
 
   return (
     <nav className="grid items-start gap-2 pt-4">
+      <div className="flex justify-between">
+        <h3 className="text-sm font-semibold text-gray-500">
+          Horizontal Slides
+        </h3>
+        <span className="text-md">
+          <Icons.add>Icon</Icons.add>
+        </span>
+      </div>
       {items.map((item: any, index: any) => {
         const Icon = Icons[item.icon || "arrowRight"];
         return (

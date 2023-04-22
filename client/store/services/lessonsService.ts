@@ -23,10 +23,10 @@ export const extendedLessonsApi = dashboardApi.injectEndpoints({
       invalidatesTags: ["Lessons"],
     }),
     updateLessons: builder.mutation({
-      query: ({ id, ...rest }: any) => ({
+      query: ({ id, content }: any) => ({
         url: endpoints + "/lesson/" + id,
         method: "PUT",
-        body: rest,
+        body: { content },
       }),
       invalidatesTags: ["Lessons"],
     }),

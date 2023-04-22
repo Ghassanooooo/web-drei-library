@@ -110,7 +110,7 @@ export default function Editor({ lesson }: any) {
     const blocks = await ref.current?.save();
     // const md = blockToMarkdown(blocks.blocks);
     // console.log("blocks.blocks ==> ", blocks.blocks);
-    // console.log("blocks => MD ==> ", md);
+    console.log("blocks => MD ==> ", blocks);
 
     const response = await fetch(`/api/lessons/${lesson.id}`, {
       method: "PATCH",

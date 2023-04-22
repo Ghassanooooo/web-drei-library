@@ -33,13 +33,10 @@ export async function updateLesson(input: any) {
     const payload = await LessonModel.findByIdAndUpdate(
       { _id: input.id },
       {
-        title: input.title,
-        published: input.published,
         content: input.content,
-      },
-      { new: true }
+      }
     );
-
+    console.log("updateLesson ==> payload", payload);
     return payload;
   } catch (e) {
     throw e;

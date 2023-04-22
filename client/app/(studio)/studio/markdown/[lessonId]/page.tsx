@@ -9,8 +9,10 @@ interface EditorPageProps {
 }
 async function Index({ params }: EditorPageProps) {
   const URL = "http://lessons-api:3011/lesson/" + params.lessonId;
-  const res = await fetch(URL);
+  const res = await fetch(URL, { cache: "no-store" });
   const lesson = await res.json();
+
+  console.log("lesson", lesson);
   return <Studio lesson={lesson} />;
 }
 

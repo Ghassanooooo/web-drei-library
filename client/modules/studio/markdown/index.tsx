@@ -2,13 +2,16 @@
 import Editor from "@/containers/editor";
 import { Icons } from "@/containers/icons";
 import MonacoEditor from "@/modules/monacoEditor";
-import { Suspense, useState, useEffect } from "react";
+import { Suspense, useState, useEffect, useRef } from "react";
+import { useUpdateLessonsMutation } from "@/store/services/lessonsService";
 
 function Studio({ lesson }: any) {
   const [isLeft, setIsLeft] = useState(true);
   const [isRight, setIsRight] = useState(true);
   const [isTop, setIsTop] = useState(true);
   const [isBottom, setIsBottom] = useState(true);
+  const editorValue = useRef(null);
+  const [updateMarkdown]: any = useUpdateLessonsMutation();
 
   useEffect(() => {
     if (!isLeft) setIsRight(true);
@@ -17,9 +20,16 @@ function Studio({ lesson }: any) {
     if (!isBottom) setIsTop(true);
   }, [isLeft, isRight, isTop, isBottom]);
 
-  console.log(isLeft);
+  async function save() {
+    const { data } = await updateMarkdown({
+      content: editorValue.current,
+      id: lesson.id,
+    });
+    console.log("here is the current model value:", editorValue.current);
+  }
   return (
     <Suspense fallback={<div>Loading...</div>}>
+      <button onClick={save}>save</button>
       <div className=" h-[100%] w-[100%] flex">
         <div
           style={{
@@ -33,7 +43,13 @@ function Studio({ lesson }: any) {
           >
             {isLeft ? <Icons.arrowLeft /> : <Icons.arrowRight />}
           </span>
-          {isLeft && <MonacoEditor />}
+          {isLeft && (
+            <MonacoEditor
+              editorValue={editorValue}
+              content={lesson.content}
+              id={lesson.id}
+            />
+          )}
         </div>
 
         <div
