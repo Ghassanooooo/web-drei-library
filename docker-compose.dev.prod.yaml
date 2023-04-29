@@ -2,7 +2,7 @@ version: "3.8"
 services:
   nginx:
     depends_on:
-      - presentation-api
+      - socket-api
       - folders-api
       - lessons-api
       - client
@@ -77,7 +77,7 @@ services:
     depends_on:
       - folders-api
       - lessons-api
-      - presentation-api
+      - socket-api
     restart: unless-stopped
 
   folders-api:
@@ -118,7 +118,7 @@ services:
       - mongo
       - rabbitmq
 
-  presentation-api:
+  socket-api:
     build:
       dockerfile: Dockerfile.dev
       context: ./api/presentation

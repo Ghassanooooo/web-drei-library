@@ -2,9 +2,11 @@ version: "3.8"
 services:
   nginx:
     depends_on:
-      - presentation-api
+      - socket-api
       - folders-api
       - lessons-api
+      - auth-api
+      - users-api
       - client
     restart: always
     build:
@@ -12,6 +14,21 @@ services:
       context: ./nginx
     ports:
       - "3333:3333"
+
+  rabbitmq:
+    image: rabbitmq:3.8-management-alpine
+    container_name: "rabbitmq"
+    hostname: rabbitmq
+    ports:
+      - 5673:5672
+      - 15673:15672
+    volumes:
+      - /var/lib/rabbitmq
+    restart: always
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=user
+
   mongo:
     image: mongo
     container_name: mongo
@@ -46,7 +63,9 @@ services:
     depends_on:
       - folders-api
       - lessons-api
-      - presentation-api
+      - socket-api
+      - auth-api
+      - users-api
     restart: unless-stopped
 
   folders-api:
@@ -66,6 +85,7 @@ services:
     restart: unless-stopped
     depends_on:
       - mongo
+      - rabbitmq
 
   lessons-api:
     build:
@@ -84,21 +104,67 @@ services:
     restart: unless-stopped
     depends_on:
       - mongo
+      - rabbitmq
 
-  presentation-api:
+  socket-api:
     build:
       dockerfile: Dockerfile.dev
-      context: ./api/presentation
+      context: ./api/socket
     volumes:
-      - ./api/presentation/src:/app/src
-      - /api/presentation/node_modules
+      - ./api/socket/src:/app/src
+      - /api/socket/node_modules
     environment:
       - PORT=3012
       - NODE_ENV=development
-      - DB_NAME=presentation
+      - DB_NAME=socket
       - ROLE=admin
       - DB_URI=mongodb://mongo:27017
       - ORIGIN=*
     restart: unless-stopped
     depends_on:
       - mongo
+      - rabbitmq
+
+  auth-api:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./api/auth
+    volumes:
+      - ./api/auth/src:/app/src
+      - /api/auth/node_modules
+    environment:
+      - PORT=3013
+      - NODE_ENV=development
+      - DB_NAME=auth
+      - ROLE=admin
+      - DB_URI=mongodb://mongo:27017
+      - SERVICE_NAME=auth
+      - RABBITMQ_URI=amqp://rabbitmq:5672
+      - ORIGIN=*
+      - JWT_SECRET=secret
+    restart: unless-stopped
+    depends_on:
+      - mongo
+      - rabbitmq
+
+  users-api:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./api/users
+    volumes:
+      - ./api/users/src:/app/src
+      - /api/users/node_modules
+    environment:
+      - PORT=3014
+      - NODE_ENV=development
+      - DB_NAME=users
+      - SERVICE_NAME=users
+      - RABBITMQ_URI=amqp://rabbitmq:5672
+      - ROLE=admin
+      - DB_URI=mongodb://mongo:27017
+      - ORIGIN=*
+      - JWT_SECRET=secret
+    restart: unless-stopped
+    depends_on:
+      - mongo
+      - rabbitmq
