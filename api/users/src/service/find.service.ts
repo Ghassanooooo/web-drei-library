@@ -23,7 +23,7 @@ export async function loginJwt(input: any) {
     }
     const uuid = randomUUID();
     console.log("user ==> ", user);
-    RabbitMQ.preduce(user, uuid, "auth");
+    // RabbitMQ.preduce(user, uuid, "auth");
     return user;
   }
 }

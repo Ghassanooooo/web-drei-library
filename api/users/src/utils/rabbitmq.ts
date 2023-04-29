@@ -1,8 +1,13 @@
 import { connect, Connection, Channel, ConsumeMessage } from "amqplib";
 import environmentVariables from "../config/environment-variables";
+import { EventEmitter } from "events";
 
 class Consumer {
-  constructor(private channel: any, private queue: string) {}
+  constructor(
+    private channel: any,
+    private queue: string,
+    private eventEmitter: EventEmitter
+  ) {}
   async consumerMessages() {
     console.log("consumer ready to consume messages..");
     this.channel.consume(
@@ -14,11 +19,7 @@ class Consumer {
             "Invalid message, correlationId or replyTo is missing"
           );
         }
-        await RabbitMQ.getInstance().preduce(
-          JSON.parse(message.content.toString()),
-          correlationId,
-          replyTo
-        );
+        this.eventEmitter.emit(correlationId.toString(), message);
       },
       { noAck: true }
     );
@@ -26,14 +27,30 @@ class Consumer {
 }
 
 class Producer {
-  constructor(private channel: any) {}
+  constructor(private channel: any, private eventEmitter: EventEmitter) {}
   async producerMessages(
     data: any,
     correlationId: string,
     replyToQueue: string
   ) {
-    this.channel.sendToQueue(replyToQueue, Buffer.from(data), {
-      correlationId,
+    this.channel.sendToQueue(
+      environmentVariables.serviceName,
+      Buffer.from(data),
+      {
+        correlationId,
+        replyTo: replyToQueue,
+        expiration: 10,
+      }
+    );
+
+    return new Promise((resolve, reject) => {
+      this.eventEmitter.once(correlationId, async (message: ConsumeMessage) => {
+        const reply = JSON.parse(message.content.toString());
+        if (reply.error) {
+          return reject(reply.error);
+        }
+        resolve(reply);
+      });
     });
   }
 }
@@ -44,6 +61,7 @@ class RabbitMQ {
   private connection: any;
   private producer: any;
   private consumer: any;
+  private eventEmitter: any;
   private constructor() {}
   private static instance: RabbitMQ;
   private isInitialized = false;
@@ -66,9 +84,13 @@ class RabbitMQ {
         environmentVariables.serviceName,
         { exclusive: true }
       );
-
-      this.producer = new Producer(this.producerChannel);
-      this.consumer = new Consumer(this.consumerChannel, queue);
+      this.eventEmitter = new EventEmitter();
+      this.producer = new Producer(this.producerChannel, this.eventEmitter);
+      this.consumer = new Consumer(
+        this.consumerChannel,
+        queue,
+        this.eventEmitter
+      );
       this.consumer.consumerMessages();
       this.isInitialized = true;
     } catch (e) {
@@ -85,6 +107,7 @@ class RabbitMQ {
       replyToQueue
     );
   }
+  // async consume()  todo
 }
 
 export default RabbitMQ.getInstance();

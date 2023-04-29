@@ -8,7 +8,7 @@ import routes from "./routes";
 import notFoundMiddleware from "./middleware/not-found";
 import errorHandlerMiddleware from "./middleware/error-handler";
 import environmentVariables from "./config/environment-variables";
-
+import bodyParser from "body-parser";
 import RabbitMQ from "./utils/rabbitmq";
 
 const app: Express = express();
@@ -18,6 +18,7 @@ app.use(cors({ origin, credentials: true }));
 app.use(express.urlencoded({ extended: true }));
 app.use(mongoSanitize());
 app.use(express.json());
+app.use(bodyParser.json());
 app.use(express.static("public"));
 
 routes(app);

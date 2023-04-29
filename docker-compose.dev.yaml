@@ -132,6 +132,8 @@ services:
     volumes:
       - ./api/auth/src:/app/src
       - /api/auth/node_modules
+    env_file:
+      - .env
     environment:
       - PORT=3013
       - NODE_ENV=development
@@ -154,6 +156,8 @@ services:
     volumes:
       - ./api/users/src:/app/src
       - /api/users/node_modules
+    env_file:
+      - .env
     environment:
       - PORT=3014
       - NODE_ENV=development
