@@ -6,7 +6,11 @@ export const dashboardApi = createApi({
   refetchOnFocus: true,
   baseQuery: fetchBaseQuery({
     baseUrl: baseUrl,
+    prepareHeaders: (headers, { getState }) => {
+      return headers;
+    },
+    credentials: "include",
   }),
-  tagTypes: ["Folders", "Lessons"],
+  tagTypes: ["Folders", "Lessons", "Users"],
   endpoints: (builder) => ({}),
 });

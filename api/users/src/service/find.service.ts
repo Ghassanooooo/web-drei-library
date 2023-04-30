@@ -28,10 +28,7 @@ export async function loginJwt(input: any) {
       user,
       correlationId
     );
-    console.log("payload weeeee ==> ", payload);
-    //console.log("user ==> ", user);
 
-    // RabbitMQ.preduce(user, uuid, "auth");
-    return user;
+    return payload;
   }
 }

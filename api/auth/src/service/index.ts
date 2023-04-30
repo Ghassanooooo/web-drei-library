@@ -1,6 +1,6 @@
-import {} from "./create.service";
-import {} from "./find.service";
-import {} from "./delete.service";
-import {} from "./update.service";
+import * as create from "./create.service";
+import * as find from "./find.service";
+import * as remove from "./remove.service";
+import * as update from "./update.service";
 
-export default {};
+export default { create, find, update, remove };

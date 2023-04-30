@@ -5,14 +5,23 @@ import { StatusCodes } from "http-status-codes";
 export async function loginJwt(req: Request, res: Response) {
   const { email, password } = req.body;
   try {
-    const payload = await service.find.loginJwt({
+    const payload: any = await service.find.loginJwt({
       email,
       password,
     });
-    return res.status(StatusCodes.CREATED).json({
-      payload,
-    });
+
+    res.cookie(
+      payload.accessToken.name,
+      payload.accessToken.value,
+      payload.accessToken.options
+    );
+    res.cookie(
+      payload.refreshToken.name,
+      payload.refreshToken.value,
+      payload.refreshToken.options
+    );
+    res.status(StatusCodes.CREATED).send("Login successfully");
   } catch (e: any) {
-    return res.status(StatusCodes.BAD_REQUEST).json({ message: e.message });
+    res.status(StatusCodes.BAD_REQUEST).json({ message: e.message });
   }
 }

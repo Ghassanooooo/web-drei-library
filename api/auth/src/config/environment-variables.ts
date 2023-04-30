@@ -7,7 +7,7 @@ const environmentVariables: any = {
   port: process.env.PORT,
   role: process.env.ROLE,
   origin: process.env.ORIGIN,
-  accessTokenSecret: process.env.JWT_SECRET,
+  jwtSecret: process.env.JWT_SECRET,
   serviceName: process.env.SERVICE_NAME,
 };
 

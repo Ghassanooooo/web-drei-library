@@ -139,8 +139,7 @@ services:
       - DB_NAME=auth
       - ROLE=admin
       - SERVICE_NAME=auth
-      - ORIGIN=*
-      - JWT_SECRET=secret
+      - ORIGIN=http://localhost:3000
     restart: unless-stopped
     depends_on:
       - mongo
@@ -161,8 +160,7 @@ services:
       - DB_NAME=users
       - SERVICE_NAME=users
       - ROLE=admin
-      - ORIGIN=*
-      - JWT_SECRET=secret
+      - ORIGIN=http://localhost:3000
     restart: unless-stopped
     depends_on:
       - mongo

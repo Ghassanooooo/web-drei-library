@@ -1,17 +1,16 @@
 import { connect, ConsumeMessage } from "amqplib";
 import { EventEmitter } from "events";
-import environmentVariables from "../config/environment-variables";
 
-async function createToken(data: any) {
-  return { name: "auth created token new" };
-}
+import environmentVariables from "../config/environment-variables";
+//import utils from "./index";
+import service from "../service";
 
 class MessageHandler {
   static async handle(handler: string, data: any) {
     let result;
     switch (handler) {
       case "create.token":
-        result = createToken(data);
+        result = await service.create.createToken(data);
         break;
       default:
         throw new Error("Invalid handler");

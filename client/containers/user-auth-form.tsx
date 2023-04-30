@@ -12,30 +12,37 @@ import { Icons } from "@/containers/icons";
 import { buttonVariants } from "@/components/button";
 import { Input } from "@/components/input";
 import { Label } from "@/components/label";
+import { useLoginMutation } from "@/store/services/usersService";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 type FormData = z.infer<typeof userAuthSchema>;
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
+  const [login] = useLoginMutation();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [isGitHubLoading, setIsGitHubLoading] = React.useState<boolean>(false);
   const searchParams = useSearchParams();
 
-  async function onSubmit(data: FormData) {
+  async function onSubmit(e: any) {
+    e.preventDefault();
+    const body = {
+      email: e.target.email.value,
+      password: e.target.password.value,
+    };
     setIsLoading(true);
-
+    await login(body);
     setIsLoading(false);
 
-    return toast({
+    /* return toast({
       title: "Check your email",
       description: "We sent you a login link. Be sure to check your spam too.",
-    });
+    });*/
   }
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
-      <form onSubmit={() => {}}>
+      <form onSubmit={onSubmit}>
         <div className="grid gap-2">
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="email">
@@ -43,10 +50,24 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             </Label>
             <Input
               id="email"
-              placeholder="name@example.com"
+              placeholder="Email"
               type="email"
               autoCapitalize="none"
               autoComplete="email"
+              autoCorrect="off"
+              disabled={isLoading || isGitHubLoading}
+            />
+          </div>
+          <div className="grid gap-1">
+            <Label className="sr-only" htmlFor="password">
+              Email
+            </Label>
+            <Input
+              id="password"
+              placeholder="Password"
+              type="password"
+              autoCapitalize="none"
+              autoComplete="password"
               autoCorrect="off"
               disabled={isLoading || isGitHubLoading}
             />
