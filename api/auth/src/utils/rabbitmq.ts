@@ -77,7 +77,7 @@ class RabbitMQ {
       return;
     }
     try {
-      this.connection = await connect(environmentVariables.rabbitmqUri);
+      this.connection = await connect("");
       this.producerChannel = await this.connection.createChannel();
       this.consumerChannel = await this.connection.createChannel();
       const { queue } = await this.consumerChannel.assertQueue(

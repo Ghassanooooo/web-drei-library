@@ -1,10 +1,8 @@
 import User from "../models/user.model";
-import { randomUUID } from "crypto";
 import RabbitMQ from "../utils/rabbitmq";
 
 export async function loginJwt(input: any) {
   const { email, password } = input;
-
   if (!email || !password) {
     throw new Error("Please provide email and password");
   }
@@ -21,8 +19,10 @@ export async function loginJwt(input: any) {
     if (!user.isVerified) {
       throw new Error("Please verify your email");
     }
-    const uuid = randomUUID();
-    console.log("user ==> ", user);
+    const payload = await RabbitMQ.producerMessages("auth", user, "123456789");
+    console.log("payload weeeee ==> ", payload);
+    //console.log("user ==> ", user);
+
     // RabbitMQ.preduce(user, uuid, "auth");
     return user;
   }

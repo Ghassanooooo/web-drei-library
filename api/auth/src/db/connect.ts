@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import environmentVariables from "../config/environment-variables";
 
-const dbUri: string = environmentVariables.dbUri || "mongodb://mongo:27017";
+const dbUri: string = "mongodb://mongo:27017";
 const dbName: string = environmentVariables.dbName || "auth";
 const connectDB = () => {
   mongoose

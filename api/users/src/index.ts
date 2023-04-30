@@ -29,5 +29,7 @@ const server = http.createServer(app);
 server.listen(port, async () => {
   console.log(`App is running at http://localhost:${port}`);
   connectDB();
-  RabbitMQ.initialize();
+  setTimeout(() => {
+    RabbitMQ.initialize();
+  }, 5000);
 });

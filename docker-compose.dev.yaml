@@ -23,11 +23,10 @@ services:
       - 5673:5672
       - 15673:15672
     volumes:
-      - /var/lib/rabbitmq
+      - ./rabbit/data:/var/lib/rabbitmq
+      - ./rabbit/log:/var/log/rabbitmq
+      - ./rabbit/etc:/etc/rabbitmq
     restart: always
-    environment:
-      - RABBITMQ_DEFAULT_USER=user
-      - RABBITMQ_DEFAULT_PASS=user
 
   mongo:
     image: mongo
@@ -37,6 +36,8 @@ services:
     volumes:
       - ./data:/data/db
     restart: always
+    depends_on:
+      - rabbitmq
 
   client:
     build:
@@ -139,9 +140,7 @@ services:
       - NODE_ENV=development
       - DB_NAME=auth
       - ROLE=admin
-      - DB_URI=mongodb://mongo:27017
       - SERVICE_NAME=auth
-      - RABBITMQ_URI=amqp://rabbitmq:5672
       - ORIGIN=*
       - JWT_SECRET=secret
     restart: unless-stopped
@@ -163,9 +162,7 @@ services:
       - NODE_ENV=development
       - DB_NAME=users
       - SERVICE_NAME=users
-      - RABBITMQ_URI=amqp://rabbitmq:5672
       - ROLE=admin
-      - DB_URI=mongodb://mongo:27017
       - ORIGIN=*
       - JWT_SECRET=secret
     restart: unless-stopped
