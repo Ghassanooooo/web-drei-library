@@ -8,28 +8,7 @@ import routes from "./routes";
 import notFoundMiddleware from "./middleware/not-found";
 import errorHandlerMiddleware from "./middleware/error-handler";
 import environmentVariables from "./config/environment-variables";
-//import RabbitMQ from "./utils/rabbitmq";
-import { connect, Connection, Channel, ConsumeMessage } from "amqplib";
-async function connectRabbitMQ() {
-  const connection = await connect("amqp://rabbitmq:5672");
-  const channel = await connection.createChannel();
-  await channel.assertQueue("auth");
-  channel.consume("auth", (message: any) => {
-    const { correlationId, replyTo } = message.properties;
-    const reply = JSON.parse(message.content.toString());
-    console.log(" auth recived ==> ", reply);
-    channel.ack(message);
-    channel.sendToQueue(
-      replyTo,
-      Buffer.from(JSON.stringify({ name: "auth created token" })),
-      {
-        correlationId,
-        expiration: 10,
-        replyTo,
-      }
-    );
-  });
-}
+import RabbitMQ from "./utils/rabbitmq";
 
 const app: Express = express();
 const port = environmentVariables.port;
@@ -50,6 +29,6 @@ server.listen(port, async () => {
   // RabbitMQ.initialize();
   connectDB();
   setTimeout(() => {
-    connectRabbitMQ();
+    RabbitMQ.initialize();
   }, 5000);
 });

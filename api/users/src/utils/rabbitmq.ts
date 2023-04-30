@@ -1,63 +1,27 @@
-import { connect, Connection, Channel, ConsumeMessage } from "amqplib";
-import environmentVariables from "../config/environment-variables";
+import { connect, ConsumeMessage } from "amqplib";
 import { EventEmitter } from "events";
-import { randomUUID } from "crypto";
+import environmentVariables from "../config/environment-variables";
 
-class Consumer {
-  constructor(
-    private channel: any,
-    private queue: string,
-    private eventEmitter: EventEmitter
-  ) {}
-  async consumerMessages() {
-    console.log("consumer ready to consume messages..");
-    this.channel.consume(
-      this.queue,
-      async (message: ConsumeMessage) => {
-        const { correlationId, replyTo } = message.properties;
-        if (!correlationId || !replyTo) {
-          throw new Error(
-            "Invalid message, correlationId or replyTo is missing"
-          );
-        }
-        this.eventEmitter.emit(correlationId.toString(), message);
-      },
-      { noAck: true }
-    );
-  }
+async function createToken(data: any) {
+  return { name: "auth created token" };
 }
 
-class Producer {
-  constructor(private channel: any, private eventEmitter: EventEmitter) {}
-  async producerMessages(
-    data: any,
-    correlationId: string,
-    replyToQueue: string
-  ) {
-    this.channel.sendToQueue(
-      environmentVariables.serviceName,
-      Buffer.from(data),
-      {
-        correlationId,
-        replyTo: replyToQueue,
-        expiration: 10,
-      }
-    );
-
-    return new Promise((resolve, reject) => {
-      this.eventEmitter.once(correlationId, async (message: ConsumeMessage) => {
-        const reply = JSON.parse(message.content.toString());
-        if (reply.error) {
-          return reject(reply.error);
-        }
-        resolve(reply);
-      });
-    });
+class MessageHandler {
+  static async handle(handler: string, data: any) {
+    let result;
+    switch (handler) {
+      case "create.token":
+        result = createToken(data);
+        break;
+      default:
+        throw new Error("Invalid handler");
+    }
+    return result;
   }
 }
 
 class RabbitMQ {
-  private queue: string = "users";
+  private queue: string = environmentVariables.serviceName;
   private producerChannel: any;
   private consumerChannel: any;
   private eventEmitter: any;
@@ -80,8 +44,10 @@ class RabbitMQ {
       this.connection = await connect("amqp://rabbitmq:5672");
       this.producerChannel = await this.connection.createChannel();
       this.consumerChannel = await this.connection.createChannel();
+
       await this.consumerChannel.assertQueue(this.queue);
       await this.producerChannel.assertQueue(this.queue);
+
       this.eventEmitter = new EventEmitter();
       this.isInitialized = true;
       this.consumerMessages();
@@ -97,25 +63,39 @@ class RabbitMQ {
     this.consumerChannel.consume(
       this.queue,
       async (message: ConsumeMessage) => {
-        const { correlationId } = message.properties;
-        this.eventEmitter.emit(correlationId.toString(), message);
+        const { correlationId, replyTo, headers } = message.properties;
+        if (headers?.handler) {
+          const data = JSON.parse(message.content.toString());
+
+          const result = await MessageHandler.handle(headers?.handler, data);
+          this.producerChannel.sendToQueue(
+            replyTo,
+            Buffer.from(JSON.stringify(result)),
+            { expiration: 10, correlationId, replyTo }
+          );
+        } else {
+          this.eventEmitter.emit(correlationId.toString(), message);
+        }
       },
       { noAck: true }
     );
   }
   async producerMessages(
-    serviceName: string,
+    sendTo: string,
+    replyTo: string,
+    handler: string | null,
     data: any,
     correlationId: string
   ) {
     if (!this.isInitialized) {
       await this.initialize();
     }
+
     console.log("producer send producerChannel==> ", data);
     this.producerChannel.sendToQueue(
-      serviceName,
+      sendTo,
       Buffer.from(JSON.stringify(data)),
-      { expiration: 10, correlationId, replyTo: this.queue }
+      { expiration: 10, correlationId, replyTo, headers: { handler } }
     );
 
     return new Promise((resolve, reject) => {

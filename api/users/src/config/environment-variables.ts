@@ -1,7 +1,7 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 
-export default {
+const environmentVariables: any = {
   nodeEnv: process.env.NODE_ENV,
   dbName: process.env.DB_NAME || "users",
   port: process.env.PORT,
@@ -10,3 +10,5 @@ export default {
   accessTokenSecret: process.env.JWT_SECRET,
   serviceName: process.env.SERVICE_NAME,
 };
+
+export default environmentVariables;

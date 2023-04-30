@@ -23,9 +23,7 @@ services:
       - 5673:5672
       - 15673:15672
     volumes:
-      - ./rabbit/data:/var/lib/rabbitmq
-      - ./rabbit/log:/var/log/rabbitmq
-      - ./rabbit/etc:/etc/rabbitmq
+      - /var/lib/rabbitmq
     restart: always
 
   mongo:
