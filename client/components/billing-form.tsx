@@ -5,7 +5,7 @@ import { toast } from "@/hooks/use-toast";
 
 import { UserSubscriptionPlan } from "@/types";
 import { cn, formatDate } from "@/lib/utils";
-import { Icons } from "@/components/icons";
+import { Icons } from "@/containers/icons";
 import { buttonVariants } from "@/components/button";
 import { Card } from "@/components/card";
 
@@ -22,7 +22,7 @@ export function BillingForm({
 }: BillingFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-  async function onSubmit(event) {
+  async function onSubmit(event: any) {
     event.preventDefault();
     setIsLoading(!isLoading);
 

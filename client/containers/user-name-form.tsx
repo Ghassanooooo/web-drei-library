@@ -4,7 +4,6 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User } from "@prisma/client";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -16,13 +15,9 @@ import { Card } from "@/components/card";
 import { Input } from "@/components/input";
 import { Label } from "@/components/label";
 
-interface UserNameFormProps extends React.HTMLAttributes<HTMLFormElement> {
-  user: Pick<User, "id" | "name">;
-}
-
 type FormData = z.infer<typeof userNameSchema>;
 
-export function UserNameForm({ user, className, ...props }: UserNameFormProps) {
+export function UserNameForm({ user, className, ...props }: any) {
   const router = useRouter();
   const {
     handleSubmit,

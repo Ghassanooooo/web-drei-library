@@ -45,7 +45,9 @@ function Studio({ lesson }: any) {
             style={{ height: isTop ? (isBottom ? "50%" : "95%") : "5%" }}
             className=" bg-blue-800 h-[50%] w-[100%] relative"
           >
-            {isRight && isTop && <MonacoEditor />}
+            {isRight && isTop && (
+              <MonacoEditor content="" id="_" editorValue="" />
+            )}
             {isRight && (
               <span
                 onClick={() => setIsTop((pre) => !pre)}

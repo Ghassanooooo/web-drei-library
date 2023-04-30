@@ -7,7 +7,7 @@ import { Icons } from "@/containers/icons";
 import { Mdx } from "@/containers/mdx";
 import { DocsPageHeader } from "@/containers/page-header";
 import { DashboardTableOfContents } from "@/containers/toc";
-import "@/modules/shared/styles/mdx.css";
+import "@/styles/mdx.css";
 import { Metadata } from "next";
 
 import { absoluteUrl } from "@/lib/utils";
@@ -38,36 +38,9 @@ export async function generateMetadata({
     return {};
   }
 
-  const url = process.env.NEXT_PUBLIC_APP_URL;
-
-  const ogUrl = new URL(`${url}/api/og`);
-  ogUrl.searchParams.set("heading", guide.title);
-  ogUrl.searchParams.set("type", "Guide");
-  ogUrl.searchParams.set("mode", "dark");
-
   return {
     title: guide.title,
     description: guide.description,
-    openGraph: {
-      title: guide.title,
-      description: guide.description,
-      type: "article",
-      url: absoluteUrl(guide.slug),
-      images: [
-        {
-          url: ogUrl.toString(),
-          width: 1200,
-          height: 630,
-          alt: guide.title,
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: guide.title,
-      description: guide.description,
-      images: [ogUrl.toString()],
-    },
   };
 }
 
