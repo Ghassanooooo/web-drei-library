@@ -4,7 +4,8 @@ import http from "http";
 import cors from "cors";
 //import connectDB from "./db/connect";
 import environmentVariables from "./config/environment-variables";
-
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
 //import Slide from "./models/Slide";
 //connectDB();
 const app: Express = express();
@@ -13,8 +14,10 @@ const port = environmentVariables.port || 4223;
 const origin = environmentVariables.origin || "*";
 
 app.use(cors({ origin, credentials: true }));
+app.use(cookieParser(environmentVariables.jwtSecret));
 app.use(express.urlencoded({ extended: true }));
 
+app.use(bodyParser.json());
 app.use(express.json());
 
 const io = new Server(server, {

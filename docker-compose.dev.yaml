@@ -80,7 +80,8 @@ services:
       - DB_NAME=folders
       - ROLE=admin
       - DB_URI=mongodb://mongo:27017
-      - ORIGIN=*
+    env_file:
+      - .env
     restart: unless-stopped
     depends_on:
       - mongo
@@ -99,7 +100,8 @@ services:
       - DB_NAME=lessons
       - ROLE=admin
       - DB_URI=mongodb://mongo:27017
-      - ORIGIN=*
+    env_file:
+      - .env
     restart: unless-stopped
     depends_on:
       - mongo
@@ -118,7 +120,8 @@ services:
       - DB_NAME=socket
       - ROLE=admin
       - DB_URI=mongodb://mongo:27017
-      - ORIGIN=*
+    env_file:
+      - .env
     restart: unless-stopped
     depends_on:
       - mongo
@@ -139,7 +142,6 @@ services:
       - DB_NAME=auth
       - ROLE=admin
       - SERVICE_NAME=auth
-      - ORIGIN=http://localhost:3000
     restart: unless-stopped
     depends_on:
       - mongo
@@ -160,7 +162,6 @@ services:
       - DB_NAME=users
       - SERVICE_NAME=users
       - ROLE=admin
-      - ORIGIN=http://localhost:3000
     restart: unless-stopped
     depends_on:
       - mongo

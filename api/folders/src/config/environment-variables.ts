@@ -8,4 +8,5 @@ export default {
   port: process.env.PORT,
   role: process.env.ROLE,
   origin: process.env.ORIGIN,
+  jwtSecret: process.env.JWT_SECRET,
 };

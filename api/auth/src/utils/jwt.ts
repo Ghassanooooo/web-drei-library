@@ -3,12 +3,12 @@ import jwt from "jsonwebtoken";
 import environment from "../config/environment-variables";
 
 export const createJWT = ({ payload }: any) => {
-  const token = jwt.sign(payload, environment.accessTokenSecret);
+  const token = jwt.sign(payload, environment.jwtSecret);
   return token;
 };
 
 export const isTokenValid = (token: any) =>
-  jwt.verify(token, environment.accessTokenSecret);
+  jwt.verify(token, environment.jwtSecret);
 
 export const attachCookiesToResponse = ({ res, user, refreshToken }: any) => {
   const accessTokenJWT = createJWT({ payload: { user } });

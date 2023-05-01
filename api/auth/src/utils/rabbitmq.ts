@@ -12,6 +12,9 @@ class MessageHandler {
       case "create.token":
         result = await service.create.createToken(data);
         break;
+      case "find.authenticate":
+        result = await service.find.authenticate(data);
+        break;
       default:
         throw new Error("Invalid handler");
     }

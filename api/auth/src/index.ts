@@ -9,13 +9,18 @@ import notFoundMiddleware from "./middleware/not-found";
 import errorHandlerMiddleware from "./middleware/error-handler";
 import environmentVariables from "./config/environment-variables";
 import RabbitMQ from "./utils/rabbitmq";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
 
 const app: Express = express();
 const port = environmentVariables.port;
 const origin = environmentVariables.origin;
 app.use(cors({ origin, credentials: true }));
+app.use(cookieParser(environmentVariables.jwtSecret));
 app.use(express.urlencoded({ extended: true }));
+
 app.use(mongoSanitize());
+app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.static("public"));
 

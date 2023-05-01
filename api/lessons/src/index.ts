@@ -4,11 +4,15 @@ import http from "http";
 import connectDB from "./db/connect";
 import routes from "./routes";
 import environmentVariables from "./config/environment-variables";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
 
 const app: Express = express();
 const port = environmentVariables.port;
 const origin = environmentVariables.origin;
 app.use(cors({ origin, credentials: true }));
+app.use(cookieParser(environmentVariables.jwtSecret));
+app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.json());

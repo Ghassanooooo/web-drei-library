@@ -14,4 +14,5 @@ const TokenSchema = new mongoose.Schema(
 TokenSchema.plugin(toJSON);
 TokenSchema.plugin(paginate);
 
-export default mongoose.model("Token", TokenSchema);
+export default (prefix: string) =>
+  mongoose.model(prefix + ".tokens", TokenSchema);

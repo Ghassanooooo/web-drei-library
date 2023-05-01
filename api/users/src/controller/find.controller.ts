@@ -4,6 +4,7 @@ import { StatusCodes } from "http-status-codes";
 
 export async function loginJwt(req: Request, res: Response) {
   const { email, password } = req.body;
+  console.log("loginJwt ==> ", req);
   try {
     const payload: any = await service.find.loginJwt({
       email,
@@ -20,6 +21,8 @@ export async function loginJwt(req: Request, res: Response) {
       payload.refreshToken.value,
       payload.refreshToken.options
     );
+
+    console.log("payload loginJwt ==> ", payload);
     res.status(StatusCodes.CREATED).send("Login successfully");
   } catch (e: any) {
     res.status(StatusCodes.BAD_REQUEST).json({ message: e.message });

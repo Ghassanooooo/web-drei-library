@@ -1,18 +1,19 @@
 import jwt from "jsonwebtoken";
 import environmentVariables from "../config/environment-variables";
 
-const createJWT = (user: any, secret: string, expiresIn: number) => {
+export const createJWT = (user: any, secret: string, expiresIn: number) => {
   const token = jwt.sign(user, secret, { expiresIn: `${expiresIn}ms` });
   return token;
 };
 
-export const createToken = ({ id }: any) => {
-  const oneDay = 1000 * 60 * 60 * 24;
+const createToken = ({ id }: any) => {
+  const oneHour = 1000 * 60 * 60;
+  //const oneDay = 1000 * 60 * 60 * 24;
   const oneMonth = 1000 * 60 * 60 * 24 * 30;
   const accessTokenJWT = createJWT(
     { id },
     environmentVariables.jwtSecret,
-    oneDay
+    oneHour
   );
   const refreshTokenJWT = createJWT(
     { id },
@@ -28,7 +29,7 @@ export const createToken = ({ id }: any) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         signed: true,
-        expire: new Date(Date.now() + oneDay),
+        expire: new Date(Date.now() + oneHour),
       },
     },
     refreshToken: {

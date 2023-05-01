@@ -1,10 +1,10 @@
 import CustomError from "../errors";
 import utils from "../utils";
-import Token from "../models/token.model";
+import Token from "../models";
 
 import environment from "../config/environment-variables";
 
-const authenticateUser = async (req, res, next) => {
+const authenticateUser = async (req: any, res: any, next: any) => {
   const { refreshToken, accessToken } = req.signedCookies;
 
   try {
@@ -54,8 +54,8 @@ const authenticateUser = async (req, res, next) => {
   }
 };
 
-const authorizePermissions = (...roles) => {
-  return (req, res, next) => {
+const authorizePermissions = (...roles: any) => {
+  return (req: any, res: any, next: any) => {
     if (!roles.includes(req.user.role)) {
       throw new CustomError.UnauthorizedError(
         "Unauthorized to access this route"
