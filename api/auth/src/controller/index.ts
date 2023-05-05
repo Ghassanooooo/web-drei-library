@@ -1,6 +1,6 @@
-import {} from "./create.controller";
+import * as create from "./create.controller";
 import * as find from "./find.controller";
-import {} from "./delete.controller";
-import {} from "./update.controller";
+import * as remove from "./remove.controller";
+import * as update from "./update.controller";
 
-export default { find };
+export default { find, create, update, remove };

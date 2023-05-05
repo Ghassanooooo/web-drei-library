@@ -21,6 +21,7 @@ export async function createToken(input: any) {
   const payload = new model({
     refreshToken: tokens.refreshToken.value,
     userId: input.id,
+    email: input.email,
   });
   await payload.save();
   return tokens;

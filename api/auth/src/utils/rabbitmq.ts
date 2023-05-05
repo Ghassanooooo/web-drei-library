@@ -12,6 +12,9 @@ class MessageHandler {
       case "create.token":
         result = await service.create.createToken(data);
         break;
+      case "remove.token":
+        result = await service.remove.removeToken(data);
+        break;
       case "find.authenticate":
         result = await service.find.authenticate(data);
         break;

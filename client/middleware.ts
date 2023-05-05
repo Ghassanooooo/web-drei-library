@@ -1,7 +1,6 @@
 // middleware.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import axios from "axios";
 // This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
   //const access_token = request.cookies.get("access_token");
@@ -24,7 +23,6 @@ export async function middleware(request: NextRequest) {
       // console.log("NextResponse ==> ", response.cookies);
 
       response.cookies.delete("refresh_token");
-      response.cookies.delete("access_token");
       return response;
     }
     return NextResponse.next();
@@ -36,5 +34,10 @@ export async function middleware(request: NextRequest) {
 
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: ["/lessons"],
+  matcher: [
+    "/lessons/:path*",
+    "/folders/:path*",
+    "/reports/:path*",
+    "/account/:path*",
+  ],
 };

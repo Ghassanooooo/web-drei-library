@@ -7,18 +7,16 @@ export async function findModel({ name }: { name: string }) {
 }
 
 export async function authenticate(req: Request) {
-  const { refresh_token: refreshToken, access_token: accessToken } =
-    req.signedCookies;
+  const { refresh_token: refreshToken } = req.signedCookies;
   let isAuth = false;
   try {
-    utils.tokenVerify(accessToken);
-    isAuth = true;
-  } catch (err) {
     const refresh_token: any = utils.tokenVerify(refreshToken);
 
     const model = await findModel({ name: refresh_token.id.toString() });
     const token = await model.findOne({ refreshToken });
     if (!!token) isAuth = true;
+  } catch (err) {
+    isAuth = false;
   } finally {
     return isAuth;
   }

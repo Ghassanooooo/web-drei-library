@@ -12,18 +12,22 @@ export async function loginJwt(req: Request, res: Response) {
     });
 
     res.cookie(
-      payload.accessToken.name,
-      payload.accessToken.value,
-      payload.accessToken.options
-    );
-    res.cookie(
       payload.refreshToken.name,
       payload.refreshToken.value,
       payload.refreshToken.options
     );
+    console.log("payload.refreshToken ==> ", payload.refreshToken);
+    res.status(StatusCodes.CREATED).json(payload.accessToken);
+  } catch (e: any) {
+    res.status(StatusCodes.BAD_REQUEST).json({ message: e.message });
+  }
+}
 
-    console.log("payload loginJwt ==> ", payload);
-    res.status(StatusCodes.CREATED).send("Login successfully");
+export async function logout(req: Request, res: Response) {
+  try {
+    const payload = await service.find.logout(req);
+    res.clearCookie("refresh_token");
+    res.status(StatusCodes.OK).json(payload);
   } catch (e: any) {
     res.status(StatusCodes.BAD_REQUEST).json({ message: e.message });
   }

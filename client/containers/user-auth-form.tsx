@@ -13,12 +13,15 @@ import { buttonVariants } from "@/components/button";
 import { Input } from "@/components/input";
 import { Label } from "@/components/label";
 import { useLoginMutation } from "@/store/services/usersService";
+import { useRouter } from "next/navigation";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 type FormData = z.infer<typeof userAuthSchema>;
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
+  const router = useRouter();
+
   const [login] = useLoginMutation();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [isGitHubLoading, setIsGitHubLoading] = React.useState<boolean>(false);
@@ -31,9 +34,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       password: e.target.password.value,
     };
     setIsLoading(true);
-    await login(body);
+    const { data }: any = await login(body);
+    console.log(data?.value, "UserAuthForm");
     setIsLoading(false);
-
+    router.push("/lessons");
     /* return toast({
       title: "Check your email",
       description: "We sent you a login link. Be sure to check your spam too.",

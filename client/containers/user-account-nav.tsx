@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-
+import { useRouter } from "next/navigation";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,8 +10,18 @@ import {
   DropdownMenuTrigger,
 } from "@/components/dropdown-menu";
 import { UserAvatar } from "@/containers/user-avatar";
+import { useLogoutMutation } from "@/store/services/usersService";
 
 export function UserAccountNav({ user }: any) {
+  const router = useRouter();
+  const [logout]: any = useLogoutMutation();
+  const onLogout = async () => {
+    console.log("logout");
+    const payload = await logout();
+    router.push("/login");
+    console.log("logout", payload);
+    //await notFound();
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -41,7 +51,9 @@ export function UserAccountNav({ user }: any) {
           <Link href="/dashboard/settings">Settings</Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer">Sign out</DropdownMenuItem>
+        <DropdownMenuItem onClick={onLogout} className="cursor-pointer">
+          Sign out
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

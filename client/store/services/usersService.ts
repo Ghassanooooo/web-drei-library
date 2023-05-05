@@ -12,7 +12,15 @@ export const extendedLessonsApi = dashboardApi.injectEndpoints({
       }),
       invalidatesTags: ["Users"],
     }),
+
+    logout: builder.mutation({
+      query: () => ({
+        url: endpoints + "/users/find/logout",
+        method: "POST",
+      }),
+      invalidatesTags: ["Auth"],
+    }),
   }),
 });
 
-export const { useLoginMutation } = extendedLessonsApi;
+export const { useLoginMutation, useLogoutMutation } = extendedLessonsApi;

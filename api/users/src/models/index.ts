@@ -60,4 +60,5 @@ UserSchema.methods.comparePassword = async function (canditatePassword: any) {
 UserSchema.plugin(toJSON);
 UserSchema.plugin(paginate);
 
-export default mongoose.model("User", UserSchema);
+export default (prefix: string) =>
+  mongoose.model(prefix + ".users", UserSchema);

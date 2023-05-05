@@ -6,5 +6,6 @@ function routes(app: Express) {
 
   app.post("/users/create/register-jwt", controller.create.registerJwt);
   app.post("/users/find/login-jwt", controller.find.loginJwt);
+  app.post("/users/find/logout", controller.find.logout);
 }
 export default routes;

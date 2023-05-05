@@ -25,12 +25,6 @@ const createToken = ({ id }: any) => {
     accessToken: {
       name: "access_token",
       value: accessTokenJWT,
-      options: {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        signed: true,
-        expire: new Date(Date.now() + oneHour),
-      },
     },
     refreshToken: {
       name: "refresh_token",
@@ -39,7 +33,7 @@ const createToken = ({ id }: any) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         signed: true,
-        expire: new Date(Date.now() + oneMonth),
+        maxAge: oneMonth,
       },
     },
   };
