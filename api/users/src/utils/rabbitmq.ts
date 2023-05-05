@@ -7,14 +7,14 @@ async function createToken(data: any) {
 }
 
 class MessageHandler {
-  static async handle(handler: string, data: any) {
+  static async handle(action: string, data: any) {
     let result;
-    switch (handler) {
+    switch (action) {
       case "create.token":
         result = createToken(data);
         break;
       default:
-        throw new Error("Invalid handler");
+        throw new Error("Invalid action");
     }
     return result;
   }
@@ -64,10 +64,10 @@ class RabbitMQ {
       this.queue,
       async (message: ConsumeMessage) => {
         const { correlationId, replyTo, headers } = message.properties;
-        if (headers?.handler) {
+        if (headers?.action) {
           const data = JSON.parse(message.content.toString());
 
-          const result = await MessageHandler.handle(headers?.handler, data);
+          const result = await MessageHandler.handle(headers?.action, data);
           this.producerChannel.sendToQueue(
             replyTo,
             Buffer.from(JSON.stringify(result)),
@@ -83,7 +83,7 @@ class RabbitMQ {
   async producerMessages(
     sendTo: string,
     replyTo: string,
-    handler: string | null,
+    action: string | null,
     data: any,
     correlationId: string
   ) {
@@ -95,7 +95,7 @@ class RabbitMQ {
     this.producerChannel.sendToQueue(
       sendTo,
       Buffer.from(JSON.stringify(data)),
-      { expiration: 10, correlationId, replyTo, headers: { handler } }
+      { expiration: 10, correlationId, replyTo, headers: { action } }
     );
 
     return new Promise((resolve, reject) => {
